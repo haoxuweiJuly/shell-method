@@ -1,5 +1,5 @@
-/* 柱壳法 · 离线缓存。页面更新后，把下面的版本号 +1，同学的浏览器才会拉新版。 */
-const CACHE = "shell-method-v1";
+/* 柱壳法 · 离线缓存。版本号由 site.py 按页面内容的哈希自动生成，不用手动改。 */
+const CACHE = "shell-method-8e7ba4a9fd";
 const ASSETS = ["./", "./index.html", "./manifest.json",
                 "./icon-192.png", "./icon-512.png"];
 

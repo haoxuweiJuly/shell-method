@@ -289,7 +289,12 @@ const FUNCS = [
   { id:"sqrt",  tex:"f(x) = √x",         f:x=>Math.sqrt(x),          a:0.5, b:4.0 },
   { id:"quad",  tex:"f(x) = ⅓x²",        f:x=>x*x/3,                 a:0.5, b:3.0 },
   { id:"recip", tex:"f(x) = 4/x",        f:x=>4/x,                   a:1.0, b:4.0 },
-  { id:"wave",  tex:"f(x) = 2 + sin 2x", f:x=>2+Math.sin(2*x),       a:0.5, b:4.0 }
+  { id:"wave",  tex:"f(x) = 2 + sin 2x", f:x=>2+Math.sin(2*x),       a:0.5, b:4.0 },
+  // 分段函数：在 x=1 处两段都等于 2（2·1² = 1+tan(π/4)），所以是连续的。
+  // 上限 e-1 直接取自定义域，不是"好看的数"；tan 在 x=2 处才发散，区间内安全。
+  { id:"exam",  tex:"f(x) = 2x² / 1+tan(πx/4)",
+    f:x => x <= 1 ? 2*x*x : 1 + Math.tan(Math.PI*x/4),
+    a:0.0, b:Math.E - 1, iv:"[0, e−1]" }
 ];
 
 /* ══════════════════════════════════════════════════════════
@@ -746,7 +751,8 @@ FUNCS.forEach((fn, i) => {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.setAttribute("aria-pressed", i === S.fx ? "true" : "false");
-  btn.innerHTML = '<span>' + fn.tex + '</span><span class="iv">[' + fn.a + ', ' + fn.b + ']</span>';
+  btn.innerHTML = '<span>' + fn.tex + '</span><span class="iv">'
+                + (fn.iv || '[' + fn.a + ', ' + fn.b + ']') + '</span>';
   btn.addEventListener("click", () => setFx(i));
   fxList.appendChild(btn);
 });
@@ -887,7 +893,8 @@ function loop(now){
    16. 启动
    ══════════════════════════════════════════════════════════ */
 /* 用 URL 锚点直接跳到某个状态，方便收藏与分享：
-   #fx=2&mode=many&n=24&x0=2&dx=0.15&p=0.78&solid=1                */
+   #fx=2&mode=many&n=24&x0=2&dx=0.15&p=0.78&solid=1
+   曲线序号 fx：0=√x  1=⅓x²  2=4/x  3=2+sin2x  4=分段函数(考题)   */
 function applyHash(){
   const raw = decodeURIComponent(location.hash.replace(/^#/, ""));
   if (!raw) return;
